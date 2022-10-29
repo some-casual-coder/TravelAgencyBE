@@ -1,12 +1,14 @@
 package com.project.TravelAgency.controller;
 
+import com.project.TravelAgency.dto.UserDTO;
 import com.project.TravelAgency.entity.*;
 import com.project.TravelAgency.error.UserAlreadyExistsException;
 import com.project.TravelAgency.service.JwtService;
 import com.project.TravelAgency.service.UserService;
 import com.project.TravelAgency.service.UserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,6 +21,7 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin("/*")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -27,13 +30,17 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @PostMapping({"/registerUser"})
-    public User registerUser(@RequestBody User user, HttpServletRequest request) throws MessagingException {
+    public User registerUser(@RequestBody UserDTO userDTO, HttpServletRequest request) throws MessagingException {
         try{
             String baseURL = ServletUriComponentsBuilder.fromRequestUri(request)
                     .replacePath(null)
                     .build()
                     .toUriString();
+            User user = convertToEntity(userDTO);
             User registeredUser = userService.registerUser(user);
             String code = UUID.randomUUID().toString();
             VerificationCode verificationCode = userService.createVerificationCodeForUser(registeredUser, code);
@@ -45,7 +52,7 @@ public class UserController {
             userService.sendVerificationEmail(baseURL, email, verificationCode.getVerificationCode());
             return registeredUser;
         }catch (UserAlreadyExistsException ex){
-            System.out.println(ex);
+            log.error(String.valueOf(ex));
             throw new UserAlreadyExistsException(ex);
         } catch (MessagingException e) {
             throw new MessagingException(e.toString());
@@ -55,10 +62,10 @@ public class UserController {
     @GetMapping("/user/verifyUser")
     public boolean verifyUser(@RequestParam String code){
         String result = userService.validateVerificationCode(code);
-        if (result == UserServiceImpl.VALID){
+        if (result.equals(UserServiceImpl.VALID)){
             return true;
         }
-        System.out.println(result);
+        log.error(result);
         return false;
     }
 
@@ -97,7 +104,7 @@ public class UserController {
             userService.sendPwdResetEmail(baseURL, emailToSend, passwordResetToken.getToken());
             return true;
         }catch (UserAlreadyExistsException ex){
-            System.out.println(ex);
+            log.error(String.valueOf(ex));
             throw new UserAlreadyExistsException(ex);
         }
     }
@@ -106,8 +113,8 @@ public class UserController {
     public boolean changePassword(@RequestParam String resetToken, @RequestParam String newPassword){
         String validatedToken = userService.validatePasswordResetToken(resetToken);
         if (validatedToken != null){
-            System.out.println(validatedToken);
-           return false;
+            log.error(validatedToken);
+            return false;
         }
         User user = userService.getUserByPasswordResetToken(resetToken);
         if (user != null){
@@ -157,6 +164,14 @@ public class UserController {
         model.put("firstName", fName);
         model.put("lastName", lName);
         return model;
+    }
+
+    private UserDTO convertToDto(User user){
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    private User convertToEntity(UserDTO userDTO){
+        return modelMapper.map(userDTO, User.class);
     }
 
 }

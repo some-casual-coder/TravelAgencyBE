@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//@RequiredArgsConstructor
 public class WebSecurityConfig{
     @Bean
     public PasswordEncoder passwordEncoder(){
