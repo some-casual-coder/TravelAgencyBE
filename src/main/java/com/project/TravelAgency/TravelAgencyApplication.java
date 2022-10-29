@@ -4,6 +4,7 @@ import com.project.TravelAgency.entity.ERole;
 import com.project.TravelAgency.entity.Role;
 import com.project.TravelAgency.service.RoleService;
 import com.project.TravelAgency.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,10 @@ public class TravelAgencyApplication {
 		SpringApplication.run(TravelAgencyApplication.class, args);
 	}
 
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
 	@Bean
 	CommandLineRunner run(UserService userService, RoleService roleService){
 		return args -> {

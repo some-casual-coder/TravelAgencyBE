@@ -3,6 +3,8 @@ package com.project.TravelAgency.utility;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +14,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
+@Slf4j
 public class JwtUtil {
+    @Value("${travelAgency.app.jwtSecret}")
+    private String SECRETKEY;
 
-    //TODO: Get secret key and token expiry from application properties
-    private static final String SECRET_KEY = "kda192jkba001s";
-    private static final int TOKEN_EXPIRY = 86400000;
+    @Value("${travelAgency.app.tokenExpiry}")
+    private int TOKENEXPIRY;
 
     public String getUsernameFromToken(String token){
         return getClaimFromToken(token, Claims::getSubject);
@@ -28,7 +32,7 @@ public class JwtUtil {
     }
 
     private Claims getAllClaimsFromToken(String token){
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(SECRETKEY).parseClaimsJws(token).getBody();
     }
 
     public boolean validateToken(String token, UserDetails userDetails){
@@ -47,13 +51,12 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRY * 1000))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + TOKENEXPIRY * 1000L))
+                .signWith(SignatureAlgorithm.HS512, SECRETKEY)
                 .compact();
     }
 }

@@ -7,7 +7,9 @@ import com.project.TravelAgency.repo.UserRepo;
 import com.project.TravelAgency.repo.VerificationTokenRepo;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -26,13 +28,22 @@ import java.util.*;
 
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService{
 
     public static final String INVALID = "Invalid";
     public static final String EXPIRED = "Expired";
     public static final String VALID = "Valid";
 
-    public static final String EMAIL_TEMPLATE = "verification-email.flth";
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+
+    @Value("${travelAgency.mail.verification}")
+    private String verificationTemplate;
+
+    @Value("${travelAgency.mail.passwordReset}")
+    private String passwordResetTemplate;
+
 
     @Autowired
     private UserRepo userRepo;
@@ -88,7 +99,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public VerificationCode getVerificationCode(String code) {
-        return verificationTokenRepo.findByVerificationCode(code);
+        return verificationTokenRepo.findByToken(code);
     }
 
     @Override
@@ -105,7 +116,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public VerificationCode generateNewVerificationCode(String code) {
-        VerificationCode verificationCode = verificationTokenRepo.findByVerificationCode(code);
+        VerificationCode verificationCode = verificationTokenRepo.findByToken(code);
         verificationCode.updateToken(UUID.randomUUID().toString());
         verificationTokenRepo.save(verificationCode);
         return verificationCode;
@@ -115,7 +126,6 @@ public class UserServiceImpl implements UserService{
     public PasswordReset createPasswordResetTokenForUser(String email, String resetToken) {
         if(emailExists(email)){
             User user = findByEmail(email);
-            System.err.println(user.getFirstName());
             PasswordReset passwordReset = new PasswordReset(resetToken, user);
             return passwordResetRepo.save(passwordReset);
         }else{
@@ -130,16 +140,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String validateVerificationCode(String code) {
-        VerificationCode verificationCode = verificationTokenRepo.findByVerificationCode(code);
-        System.out.println(verificationCode.getVerificationCode());
+        VerificationCode verificationCode = verificationTokenRepo.findByToken(code);
         if(verificationCode == null){
             return INVALID;
         }
         User user = verificationCode.getUser();
-        System.out.println(user.getEmail());
         Date expiration = verificationCode.getExpirationDate();
         Calendar currentCalendar = Calendar.getInstance();
-        System.out.println(verificationCode.getExpirationDate());
+        log.info(String.valueOf(verificationCode.getExpirationDate()));
         if((expiration.getTime() - currentCalendar.getTime().getTime()) <= 0){
             verificationTokenRepo.delete(verificationCode);
             return EXPIRED;
@@ -161,23 +169,19 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    //TODO: get source email from application properties
     @Override
     @Async
     public void sendVerificationEmail(String appURL, Email email, String verificationCode) throws MessagingException {
         String link = "http://localhost:4200" + "/user/verifyUser?code=" + verificationCode;
         email.getModel().put("link", link);
-//        email.setContent(getContentFromTemplate(email.getModel()));
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(email.getModel());
-        //TODO get template path from properties or as a constant
-        String htmlBody = templateEngine.process("verification_email.html", thymeleafContext);
+        String htmlBody = templateEngine.process(verificationTemplate, thymeleafContext);
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
         helper.setTo(email.getTo());
-        //TODO get sender email from application properties
-        helper.setFrom("anwendungstester@gmail.com");
+        helper.setFrom(senderEmail);
         helper.setSubject("Verify Account");
         helper.setText(htmlBody, true);
 
@@ -189,17 +193,14 @@ public class UserServiceImpl implements UserService{
     public void sendPwdResetEmail(String appURL, Email email, String resetToken) throws MessagingException {
         String link = "http://localhost:4200" + "/user/changePassword?resetToken=" + resetToken;
         email.getModel().put("link", link);
-//        email.setContent(getContentFromTemplate(email.getModel()));
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(email.getModel());
-        //TODO get template path from properties or as a constant
-        String htmlBody = templateEngine.process("reset_password.html", thymeleafContext);
+        String htmlBody = templateEngine.process(passwordResetTemplate, thymeleafContext);
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
         helper.setTo(email.getTo());
-        //TODO get sender email from application properties
-        helper.setFrom("anwendungstester@gmail.com");
+        helper.setFrom(senderEmail);
         helper.setSubject("Reset Password");
         helper.setText(htmlBody, true);
 
@@ -209,18 +210,17 @@ public class UserServiceImpl implements UserService{
     @Override
     public String validatePasswordResetToken(String token) {
         PasswordReset passwordReset = passwordResetRepo.findByToken(token);
-        return !isTokenFound(passwordReset) ? "invalidToken"
-                : isTokenExpired(passwordReset) ? "expired"
-                : null;
+        if (!isTokenFound(passwordReset)){
+            return "invalidToken";
+        }
+        return isTokenExpired(passwordReset) ? "expired" : null;
     }
 
     @Override
     public boolean changeUserPassword(User user, String newPassword) throws PersistenceException {
         try {
             user.setPassword(passwordEncoder.encode(newPassword));
-            if (userRepo.save(user) != null){
-                return true;
-            }
+            userRepo.save(user);
             return false;
         }catch (PersistenceException ex){
             throw new PersistenceException(ex);
@@ -230,17 +230,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByPasswordResetToken(String token) {
         return passwordResetRepo.findByToken(token).getUser();
-    }
-
-    //Get string content from model with user details
-    public String getContentFromTemplate(Map<String, Object> model){
-        StringBuilder builder =new StringBuilder();
-        try {
-            builder.append(FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerConfig.getTemplate(EMAIL_TEMPLATE), model));
-        } catch (TemplateException | IOException e) {
-            throw new RuntimeException(e);
-        }
-        return builder.toString();
     }
 
     private boolean isTokenFound(PasswordReset passwordReset){

@@ -62,11 +62,10 @@ public class JwtService implements UserDetailsService {
         }
     }
 
-    private Set getAuthorities(User user){
-        Set authorities = new HashSet();
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(String.valueOf(role.getName())));
-        });
+    private Set<SimpleGrantedAuthority> getAuthorities(User user){
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        user.getRoles().forEach(role ->
+            authorities.add(new SimpleGrantedAuthority(String.valueOf(role.getName()))));
         return authorities;
     }
 

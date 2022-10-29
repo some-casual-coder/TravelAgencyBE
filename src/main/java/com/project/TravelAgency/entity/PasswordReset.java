@@ -12,8 +12,6 @@ import java.util.Date;
 @Setter
 @Table(name = "password_reset_tokens")
 public class PasswordReset {
-
-    //TODO: get this from application.properties
     private static final int EXPIRATION = 60*24;
 
     @Id
@@ -35,25 +33,24 @@ public class PasswordReset {
     public PasswordReset(final String token) {
         super();
         this.token = token;
-        this.expirationDate = calculateExpiryDate(EXPIRATION);
+        this.expirationDate = calculateExpiryDate();
     }
 
     public PasswordReset(final String token,final User user) {
         this.token = token;
         this.user = user;
-        this.user = user;
-        this.expirationDate = calculateExpiryDate(EXPIRATION);
+        this.expirationDate = calculateExpiryDate();
     }
 
-    private Date calculateExpiryDate(int expiryInMinutes){
+    private Date calculateExpiryDate(){
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE, expiryInMinutes);
+        calendar.add(Calendar.MINUTE, PasswordReset.EXPIRATION);
         return new Date(calendar.getTime().getTime());
     }
 
     public void updateToken(final String token){
         this.token = token;
-        this.expirationDate = calculateExpiryDate(EXPIRATION);
+        this.expirationDate = calculateExpiryDate();
     }
 }

@@ -49,7 +49,7 @@ public class UserController {
             email.setModel(generateEmailModel(
                     registeredUser.getFirstName(),
                     registeredUser.getLastName()));
-            userService.sendVerificationEmail(baseURL, email, verificationCode.getVerificationCode());
+            userService.sendVerificationEmail(baseURL, email, verificationCode.getToken());
             return registeredUser;
         }catch (UserAlreadyExistsException ex){
             log.error(String.valueOf(ex));
@@ -84,7 +84,7 @@ public class UserController {
         mail.setModel(generateEmailModel(
                 verificationCode.getUser().getFirstName(),
                 verificationCode.getUser().getLastName()));
-        userService.sendVerificationEmail(baseURL, mail, verificationCode.getVerificationCode());
+        userService.sendVerificationEmail(baseURL, mail, verificationCode.getToken());
     }
 
     @PostMapping({"/user/resetPassword"})
