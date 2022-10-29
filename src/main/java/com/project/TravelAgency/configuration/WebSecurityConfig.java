@@ -1,14 +1,11 @@
 package com.project.TravelAgency.configuration;
 
-import com.project.TravelAgency.service.JwtService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,19 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 //@RequiredArgsConstructor
 public class WebSecurityConfig{
-//    private final AuthEntryPoint authEntryPoint;
-//    private final CustomAuthorizationFilter customAuthorizationFilter;
-//    private final UserDetailsService jwtService;
-
-    @Autowired
-    private AuthEntryPoint authEntryPoint;
-
-    @Autowired
-    private CustomAuthorizationFilter customAuthorizationFilter;
-
-    @Autowired
-    private UserDetailsService jwtService;
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -49,7 +33,9 @@ public class WebSecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
+                                           AuthEntryPoint authEntryPoint,
+                                           CustomAuthorizationFilter customAuthorizationFilter) throws Exception{
         httpSecurity.cors();
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers(
@@ -70,14 +56,9 @@ public class WebSecurityConfig{
         httpSecurity.addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-//
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-//        authenticationManagerBuilder.userDetailsService(jwtService).passwordEncoder(passwordEncoder());
-//    }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService jwtService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
         authProvider.setUserDetailsService(jwtService);

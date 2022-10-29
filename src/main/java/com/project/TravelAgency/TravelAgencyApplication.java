@@ -2,7 +2,6 @@ package com.project.TravelAgency;
 
 import com.project.TravelAgency.entity.ERole;
 import com.project.TravelAgency.entity.Role;
-import com.project.TravelAgency.entity.User;
 import com.project.TravelAgency.service.RoleService;
 import com.project.TravelAgency.service.UserService;
 import org.springframework.boot.CommandLineRunner;

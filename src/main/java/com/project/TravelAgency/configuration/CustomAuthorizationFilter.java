@@ -3,6 +3,7 @@ package com.project.TravelAgency.configuration;
 import com.project.TravelAgency.service.JwtService;
 import com.project.TravelAgency.utility.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 @Component
+@Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -28,7 +32,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String header = request.getHeader("Authorization");
+        final String header = request.getHeader(AUTHORIZATION);
         String jwtToken = null;
         String username = null;
         if(header != null && header.startsWith("Bearer ")){
@@ -37,12 +41,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.getUsernameFromToken(jwtToken);
             }catch (IllegalArgumentException ex){
-                System.out.println("Unable to get JWT token");
+                log.error("Unable to get JWT token");
             }catch (ExpiredJwtException ex){
-                System.out.println("JWT token is expired");
+                log.error("JWT token is expired");
             }
         }else {
-            System.out.println("Does not start with Bearer");
+            log.error("Does not start with Bearer");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
