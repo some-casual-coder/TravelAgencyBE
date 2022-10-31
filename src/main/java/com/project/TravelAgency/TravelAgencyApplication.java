@@ -28,10 +28,10 @@ public class TravelAgencyApplication {
 	@Bean
 	CommandLineRunner run(UserService userService, RoleService roleService){
 		return args -> {
-			roleService.createRole(new Role(null, ERole.ROLE_USER));
-			roleService.createRole(new Role(null, ERole.ROLE_HOST));
-			roleService.createRole(new Role(null, ERole.ROLE_ADMIN));
-			roleService.createRole(new Role(null, ERole.ROLE_SUPER_ADMIN));
+//			roleService.createRole(new Role(null, ERole.ROLE_USER));
+//			roleService.createRole(new Role(null, ERole.ROLE_HOST));
+//			roleService.createRole(new Role(null, ERole.ROLE_ADMIN));
+//			roleService.createRole(new Role(null, ERole.ROLE_SUPER_ADMIN));
 //
 //			userService.registerUser(new User(null,"John", "Doe", "doe@gmail.com", "1234", 673892, false, new HashSet<>()));
 //			userService.registerUser(new User(null,"Peter", "Rabbit", "rabbit@gmail.com", "1234", 341276, false, new HashSet<>()));

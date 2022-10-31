@@ -4,6 +4,8 @@ import com.project.TravelAgency.entity.Email;
 import com.project.TravelAgency.entity.PasswordReset;
 import com.project.TravelAgency.entity.User;
 import com.project.TravelAgency.entity.VerificationCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
@@ -13,7 +15,7 @@ public interface UserService {
     User registerUser(User user);
     boolean deleteUser(Long id);
     User findByEmail(String email);
-    List<User> findAll();
+    Page<User> findAll(Pageable pageable);
     VerificationCode getVerificationCode(String code);
     VerificationCode createVerificationCodeForUser(User user, String code);
 
