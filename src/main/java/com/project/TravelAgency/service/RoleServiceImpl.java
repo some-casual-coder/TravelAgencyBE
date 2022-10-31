@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 
 @Service
 @Transactional
@@ -28,6 +29,7 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public void addRoleToUser(String email, ERole roleName) {
        User user = userRepo.findByEmail(email);
+       user.setRoles(new HashSet<>());
        Role role = roleRepo.findByName(roleName);
        user.getRoles().add(role);
     }

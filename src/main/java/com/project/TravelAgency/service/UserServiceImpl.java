@@ -6,16 +6,16 @@ import com.project.TravelAgency.repo.PasswordResetRepo;
 import com.project.TravelAgency.repo.UserRepo;
 import com.project.TravelAgency.repo.VerificationTokenRepo;
 import freemarker.template.Configuration;
-import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -23,7 +23,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -87,14 +86,15 @@ public class UserServiceImpl implements UserService{
         return false;
     }
 
+    //TODO : find by email using like
     @Override
     public User findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
 
     @Override
-    public List<User> findAll() {
-        return null;
+    public Page<User> findAll(Pageable pageable) {
+        return userRepo.findAll(pageable);
     }
 
     @Override

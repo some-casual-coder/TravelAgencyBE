@@ -129,6 +129,11 @@ public class UserController {
         return userService.emailExists(email);
     }
 
+    @GetMapping("/users/findByEmail")
+    public User findByEmail(@RequestParam String email){
+        return userService.findByEmail(email);
+    }
+
 
     @GetMapping({"/forUser"})
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
