@@ -8,4 +8,5 @@ public class AmenityDTO {
     private String title;
     private String content;
     private Long hotelId;
+    private Long roomId;
 }
