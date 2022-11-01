@@ -22,4 +22,9 @@ public class Hotel {
     private Double longitude;
     private String imageUrl;
     private double rating;
+
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_hotel_owner"))
+    private Long added_by;
+
 }
