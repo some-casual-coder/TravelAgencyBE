@@ -36,8 +36,10 @@ public class HotelServiceImpl implements HotelService{
     }
 
     @Override
-    public Amenity addAmenity(Amenity amenity) {
-        return amenityRepo.save(amenity);
+    public Amenity addAmenity(Amenity amenity, Long hotelId) {
+        Amenity savedAmenity = amenityRepo.save(amenity);
+        hotelRepo.findById(hotelId).ifPresent(hotel -> hotel.getAmenities().add(savedAmenity));
+        return savedAmenity;
     }
 
     @Override
@@ -91,6 +93,11 @@ public class HotelServiceImpl implements HotelService{
     @Override
     public List<Hotel> findByTown(String town) {
         return hotelRepo.findByTownContainingIgnoreCase(town);
+    }
+
+    @Override
+    public List<Hotel> findByCoordinates(Double lat, Double lng) {
+        return hotelRepo.findByLatLng(--lat, ++lat, --lng, ++lng);
     }
 
     @Override

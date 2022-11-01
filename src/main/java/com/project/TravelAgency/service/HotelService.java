@@ -5,6 +5,7 @@ import com.project.TravelAgency.entity.Hotel;
 import com.project.TravelAgency.entity.Image;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ public interface HotelService {
     Hotel addHotel(Hotel hotel);
 
     //add amenity
-    Amenity addAmenity(Amenity amenity);
+    Amenity addAmenity(Amenity amenity, Long hotelId);
 
     //add image
     Image addHotelImage(Image image);
@@ -42,6 +43,9 @@ public interface HotelService {
 
     //find by town
     List<Hotel> findByTown(String town);
+
+    //find by coordinates
+    List<Hotel> findByCoordinates(Double lat, Double lng);
 
     //find by name
     List<Hotel> findByName(String name);

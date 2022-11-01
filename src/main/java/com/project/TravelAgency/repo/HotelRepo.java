@@ -19,7 +19,7 @@ public interface HotelRepo extends JpaRepository<Hotel, Long> {
 
     //delete hotel amenity
     @Modifying
-    @Query(value = "DELETE from hotel_amenities where hotelId = :hotelId AND amenityId = :amenityId")
+    @Query(value = "DELETE from hotel_amenities where hotelId = :hotelId AND amenityId = :amenityId", nativeQuery = true)
     void removeHotelAmenity(@Param("hotelId") Long hotelId, @Param("amenityId") Long amenityId);
 
     Page<Hotel> findAll(Pageable pageable);
@@ -56,7 +56,7 @@ public interface HotelRepo extends JpaRepository<Hotel, Long> {
     //find amenities for hotel
     @Query(value = "SELECT amenities.title, amenities.content from amenities " +
             "INNER JOIN hotel_amenities ON amenities.id = hotel_amenities.amenityId " +
-            " where hotel_amenities.hotelId = :hotelId order by amenities.id ASC")
+            " where hotel_amenities.hotelId = :hotelId order by amenities.id ASC", nativeQuery = true)
     List<Amenity> findAllHotelAmenities(@Param("hotelId") Long hotelId);
 
 }
