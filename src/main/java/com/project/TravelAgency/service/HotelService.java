@@ -1,13 +1,54 @@
 package com.project.TravelAgency.service;
 
+import com.project.TravelAgency.entity.Amenity;
 import com.project.TravelAgency.entity.Hotel;
+import com.project.TravelAgency.entity.Image;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface HotelService {
     Hotel addHotel(Hotel hotel);
 
+    //add amenity
+    Amenity addAmenity(Amenity amenity);
+
+    //add image
+    Image addHotelImage(Image image);
+
+    //update hotel
+    Hotel updateHotel(Hotel hotel);
+
+    //update hotel amenity
+    Amenity updateHotelAmenity(Amenity amenity);
+
+    //delete hotel amenity
+    void removeHotelAmenity(Long hotelId, Long amenityId);
+
+    //delete hotel image
+    void deleteHotelImage(Long imageId);
+
     void deleteHotel(Long id);
 
+    //find by id
+    Optional<Hotel> findById(Long id);
+
     Page<Hotel> findAllHotels(Pageable pageable);
+
+    //find by rating
+    List<Hotel> findAllAboveRating(double rating);
+
+    //find by town
+    List<Hotel> findByTown(String town);
+
+    //find by name
+    List<Hotel> findByName(String name);
+
+    //find images for hotel
+    List<Image> findAllHotelImages(Long hotelId);
+
+    //find amenities for hotel
+    List<Amenity> findAllHotelAmenities(Long hotelId);
 }

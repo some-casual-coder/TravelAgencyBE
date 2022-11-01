@@ -9,6 +9,7 @@ import com.project.TravelAgency.repo.TransportRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +34,7 @@ public class TransportServiceImpl implements TransportService{
         return transportRepo.save(transport);
     }
 
+    @Modifying
     @Override
     public Transport updateMeansOfTransport(Transport transport) {
         return transportRepo.save(transport);
@@ -48,6 +50,7 @@ public class TransportServiceImpl implements TransportService{
         return addOnRepo.save(transportAddOn);
     }
 
+    @Modifying
     @Override
     public TransportAddOn updateAddOn(TransportAddOn transportAddOn) {
         return addOnRepo.save(transportAddOn);

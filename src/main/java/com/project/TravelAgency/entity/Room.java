@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,9 +19,20 @@ public class Room {
     private Long id;
     private String name;
     private int capacity;
-    private double price_per_day;
+    private double pricePerDay;
 
     @OneToOne(targetEntity = Hotel.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_room_hotel"))
     private Long hotel;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "room_amenities",
+            joinColumns = {
+                    @JoinColumn(name = "roomId")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "amenityId")
+            }
+    )
+    private Set<Amenity> amenities;
 }
