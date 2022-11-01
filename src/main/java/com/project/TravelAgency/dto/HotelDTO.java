@@ -11,4 +11,5 @@ public class HotelDTO {
     private Double longitude;
     private String imageUrl;
     private double rating;
+    private Long added_by;
 }

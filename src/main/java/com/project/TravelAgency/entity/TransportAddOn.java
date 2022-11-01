@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "transport_addons")
-public class TransportAddOns {
+public class TransportAddOn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +23,7 @@ public class TransportAddOns {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "transport_id", nullable = false)
+    @JoinColumn(name = "transportId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Transport transport;
 }

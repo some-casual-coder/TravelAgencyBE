@@ -1,13 +1,15 @@
 package com.project.TravelAgency.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "means_of_transport")
@@ -18,16 +20,24 @@ public class Transport {
     private Long id;
 
     private String model;
-    private String charged_per;
+    private String chargedPer;
     private int capacity;
     private double price;
+    private Double latitude;
+    private Double longitude;
 
-    @OneToOne(targetEntity = TransportType.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_transport_type"))
-    private Long transport_type;
+//    @OneToOne(targetEntity = TransportType.class, fetch = FetchType.EAGER)
+//    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_transport_type"))
+//    private Long transportType;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "transportType", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private TransportType transportType;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_transport_owner"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Long owner;
 
 }

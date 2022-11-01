@@ -21,17 +21,17 @@ public class Image {
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transport_id")
+    @JoinColumn(name = "transportId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Transport transport;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id")
+    @JoinColumn(name = "hotelId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Hotel hotel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "roomId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room;
 }
