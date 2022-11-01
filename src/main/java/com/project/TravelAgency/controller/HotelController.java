@@ -49,11 +49,11 @@ public class HotelController {
     }
 
     //update hotel
-    @PostMapping({"/hotel/update"})
+    @PutMapping({"/hotel/update"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public HotelDTO updateHotel(@RequestBody HotelDTO hotelDTO) {
         Hotel hotel = convertToEntity(hotelDTO);
-        return convertToDto(hotelService.addHotel(hotel));
+        return convertToDto(hotelService.updateHotel(hotel));
     }
 
     //delete hotel

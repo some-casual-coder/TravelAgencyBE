@@ -44,7 +44,7 @@ public class RoomController {
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public RoomDTO updateRoom(@RequestBody RoomDTO roomDTO) {
         Room room = convertToEntity(roomDTO);
-        return convertToDto(roomService.addRoom(room));
+        return convertToDto(roomService.updateRoom(room));
     }
 
     //delete room
