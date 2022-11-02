@@ -36,17 +36,17 @@ public class AdminController {
         return userService.findAll(pageable);
     }
 
-    @PostMapping("/hotel/add")
-    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public Hotel addHotel(@RequestBody HotelDTO hotelDTO){
-        return hotelService.addHotel(convertToEntity(hotelDTO));
-    }
-
-    @GetMapping("/hotels/all")
-    public Page<Hotel> findAllHotels(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size){
-        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
-        return hotelService.findAllHotels(pageable);
-    }
+//    @PostMapping("/hotel/add")
+//    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
+//    public Hotel addHotel(@RequestBody HotelDTO hotelDTO){
+//        return hotelService.addHotel(convertToEntity(hotelDTO));
+//    }
+//
+//    @GetMapping("/hotels/all")
+//    public Page<Hotel> findAllHotels(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size){
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+//        return hotelService.findAllHotels(pageable);
+//    }
 
     private Hotel convertToEntity(HotelDTO hotelDTO){
         return modelMapper.map(hotelDTO, Hotel.class);

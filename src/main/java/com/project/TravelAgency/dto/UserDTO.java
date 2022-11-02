@@ -1,5 +1,6 @@
 package com.project.TravelAgency.dto;
 
+import com.project.TravelAgency.entity.Hotel;
 import com.project.TravelAgency.entity.Role;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class UserDTO {
     private String password;
     private boolean verified;
     private Set<Role> roles;
+    private Set<Hotel> hotels;
 }

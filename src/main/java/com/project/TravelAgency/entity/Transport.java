@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -29,6 +30,12 @@ public class Transport {
 //    @OneToOne(targetEntity = TransportType.class, fetch = FetchType.EAGER)
 //    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_transport_type"))
 //    private Long transportType;
+
+    @OneToMany(mappedBy = "transport")
+    private Set<Image> images;
+
+    @OneToMany(mappedBy = "transport")
+    private Set<TransportAddOn> addOns;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "transportType", nullable = false)

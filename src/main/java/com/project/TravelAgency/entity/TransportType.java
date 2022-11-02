@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "transport_types")
@@ -19,4 +20,7 @@ public class TransportType {
     private Long id;
 
     private String type;
+
+    @OneToMany(mappedBy = "transportType")
+    private Set<Transport> transportMeans;
 }

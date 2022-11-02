@@ -21,6 +21,9 @@ public class Room {
     private int capacity;
     private double pricePerDay;
 
+    @OneToMany(mappedBy = "room")
+    private Set<Image> images;
+
     @OneToOne(targetEntity = Hotel.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_room_hotel"))
     private Long hotel;

@@ -1,6 +1,8 @@
 package com.project.TravelAgency.entity;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,9 +26,18 @@ public class Hotel {
     private String imageUrl;
     private double rating;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_hotel_owner"))
-    private Long addedBy;
+//    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "owner",referencedColumnName = "id",nullable = false, foreignKey = @ForeignKey(name = "fk_hotel_owner"))
+//    private Long owner;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User owner;
+
+
+    @OneToMany(mappedBy = "hotel")
+    private Set<Image> images;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "hotel_amenities",

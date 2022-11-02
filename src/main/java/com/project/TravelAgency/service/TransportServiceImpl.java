@@ -78,10 +78,6 @@ public class TransportServiceImpl implements TransportService{
         return transportRepo.findAll(pageable);
     }
 
-    //Example Usage
-//    public static void changeUserName(String oldFirstName, String newFirstName) {
-//        findUserByFirstName(oldFirstName).ifPresent(user -> user.setFirstName(newFirstName));
-//    }
     @Override
     public Optional<Transport> findById(Long id) {
         return transportRepo.findById(id);

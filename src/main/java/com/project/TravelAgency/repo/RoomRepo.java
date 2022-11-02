@@ -15,7 +15,7 @@ import java.util.List;
 public interface RoomRepo extends JpaRepository<Room, Long> {
     //remove an amenity from a room
     @Modifying
-    @Query(value = "DELETE from room_amenities where roomId = :roomId AND amenityId = :amenityId")
+    @Query(value = "DELETE from room_amenities where roomId = :roomId AND amenityId = :amenityId", nativeQuery = true)
     void removeRoomAmenity(@Param("roomId") Long roomId, @Param("amenityId") Long amenityId);
 
     //find all as pages

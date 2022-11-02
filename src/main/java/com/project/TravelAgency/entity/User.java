@@ -35,4 +35,7 @@ public class User {
     }
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "owner")
+    private Set<Hotel> hotels;
 }
