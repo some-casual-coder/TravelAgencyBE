@@ -29,7 +29,7 @@ import java.util.List;
 public class HotelController {
 
     @Autowired
-    private static ModelMapper modelMapper;
+    private static ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private HotelService hotelService;

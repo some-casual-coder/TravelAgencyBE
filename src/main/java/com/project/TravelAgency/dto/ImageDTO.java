@@ -10,6 +10,6 @@ public class ImageDTO {
     private Long id;
     private String imageUrl;
     private Transport transport;
-    private Hotel hotel;
+    private Hotel hotel_id;
     private Room room;
 }

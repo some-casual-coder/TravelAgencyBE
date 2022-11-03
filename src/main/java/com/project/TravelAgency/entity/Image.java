@@ -1,15 +1,16 @@
 package com.project.TravelAgency.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "all_images")
@@ -20,18 +21,21 @@ public class Image {
 
     private String imageUrl;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transportId")
+    @JoinColumn(name = "transport_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Transport transport;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotelId")
+    @JoinColumn(name = "hotel_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Hotel hotel;
+    private Hotel hotel_id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomId")
+    @JoinColumn(name = "room_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Room room;
 }

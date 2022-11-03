@@ -38,16 +38,6 @@ public interface TransportRepo extends JpaRepository<Transport, Long> {
     @Query(value = "SELECT * from means_of_transport where capacity >= :capacity order by capacity ASC", nativeQuery = true)
     List<Transport> findByCapacity(@Param("capacity") int capacity);
 
-    //find all images
-    @Query(value = "SELECT all_images.id, all_images.imageUrl from all_images " +
-            "where transportId = :transportId order by transportId ASC", nativeQuery = true)
-    List<Image> findAllTransportImages(@Param("transportId") Long transportId);
-
-    //find all addons for transport means
-    @Query(value = "select transport_addons.title, transport_addons.description from transport_addons " +
-            "where transportId = :transportId", nativeQuery = true)
-    List<TransportAddOn> findAllAddOns(@Param("transportId") Long transportId);
-
     //find all owned by
     List<Transport> findByOwner(Long owner);
 

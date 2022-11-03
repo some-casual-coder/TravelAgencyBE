@@ -1,5 +1,6 @@
 package com.project.TravelAgency.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -30,13 +31,14 @@ public class Hotel {
 //    @JoinColumn(name = "owner",referencedColumnName = "id",nullable = false, foreignKey = @ForeignKey(name = "fk_hotel_owner"))
 //    private Long owner;
 
+//    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "hotels"})
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User owner;
+    private User user = new User();
 
 
-    @OneToMany(mappedBy = "hotel")
+    @OneToMany(mappedBy = "hotel_id")
     private Set<Image> images;
 
     @ManyToMany(fetch = FetchType.EAGER)

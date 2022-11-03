@@ -30,14 +30,4 @@ public interface RoomRepo extends JpaRepository<Room, Long> {
     //find by price per day and below
     List<Room> findByPricePerDayLessThanEqualOrderByPricePerDayDesc(double pricePerDay);
 
-    //find all images for room
-    @Query(value = "SELECT id, imageUrl from all_images where roomId = :roomId", nativeQuery = true)
-    List<Image> findAllRoomImages(@Param("roomId") Long roomId);
-
-    //find all amenities for room
-    @Query(value = "SELECT amenities.title, amenities.content from amenities " +
-            "INNER JOIN room_amenities ON amenities.id = room_amenities.amenityId " +
-            " where room_amenities.roomId = :roomId order by amenities.id ASC", nativeQuery = true)
-    List<Amenity> findAllRoomAmenities(@Param("roomId") Long roomId);
-
 }

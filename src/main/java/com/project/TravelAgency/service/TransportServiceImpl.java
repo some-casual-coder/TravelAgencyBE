@@ -68,7 +68,7 @@ public class TransportServiceImpl implements TransportService{
 
     @Override
     public Image addTransportImage(Image image) {
-        image.setHotel(null);
+        image.setHotel_id(null);
         image.setRoom(null);
         return imageRepo.save(image);
     }
@@ -100,12 +100,12 @@ public class TransportServiceImpl implements TransportService{
 
     @Override
     public List<Image> findAllTransportImages(Long transportId) {
-        return transportRepo.findAllTransportImages(transportId);
+        return imageRepo.findAllTransportImages(transportId);
     }
 
     @Override
     public List<TransportAddOn> findAllAddOns(Long transportId) {
-        return transportRepo.findAllAddOns(transportId);
+        return addOnRepo.findAllAddOns(transportId);
     }
 
     @Override

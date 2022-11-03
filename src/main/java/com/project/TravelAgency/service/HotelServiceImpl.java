@@ -97,7 +97,9 @@ public class HotelServiceImpl implements HotelService{
 
     @Override
     public List<Hotel> findByCoordinates(Double lat, Double lng) {
-        return hotelRepo.findByLatLng(--lat, ++lat, --lng, ++lng);
+//        double lngEnd = lng+=1;
+//        System.out.println(lat + " , " + latEnd + " , " + lng + " , " + lngEnd);
+        return hotelRepo.findByLatLng(lat, ++lat, lng, ++lng);
     }
 
     @Override
@@ -111,11 +113,11 @@ public class HotelServiceImpl implements HotelService{
 
     @Override
     public List<Image> findAllHotelImages(Long hotelId) {
-        return hotelRepo.findAllHotelImages(hotelId);
+        return imageRepo.findAllHotelImages(hotelId);
     }
 
     @Override
     public List<Amenity> findAllHotelAmenities(Long hotelId) {
-        return hotelRepo.findAllHotelAmenities(hotelId);
+        return amenityRepo.findAllHotelAmenities(hotelId);
     }
 }

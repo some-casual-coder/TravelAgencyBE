@@ -90,11 +90,11 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public List<Image> findAllRoomImages(Long roomId) {
-        return roomRepo.findAllRoomImages(roomId);
+        return imageRepo.findAllRoomImages(roomId);
     }
 
     @Override
     public List<Amenity> findAllRoomAmenities(Long roomId) {
-        return roomRepo.findAllRoomAmenities(roomId);
+        return amenityRepo.findAllRoomAmenities(roomId);
     }
 }

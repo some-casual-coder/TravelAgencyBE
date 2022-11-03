@@ -36,6 +36,7 @@ public class User {
     )
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "owner")
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private Set<Hotel> hotels;
 }

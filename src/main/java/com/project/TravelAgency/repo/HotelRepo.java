@@ -19,13 +19,13 @@ public interface HotelRepo extends JpaRepository<Hotel, Long> {
 
     //delete hotel amenity
     @Modifying
-    @Query(value = "DELETE from hotel_amenities where hotelId = :hotelId AND amenityId = :amenityId", nativeQuery = true)
+    @Query(value = "DELETE from hotel_amenities where hotel_id = :hotelId AND amenity_id = :amenityId", nativeQuery = true)
     void removeHotelAmenity(@Param("hotelId") Long hotelId, @Param("amenityId") Long amenityId);
 
     Page<Hotel> findAll(Pageable pageable);
 
-    @Query(value = "SELECT * from hotels where latitude" +
-            " BETWEEN :latStart AND :latEnd AND longitude BETWEEN :lngStart and :lngEnd",
+    @Query(value = "SELECT * from hotels where (latitude" +
+            " BETWEEN :latStart AND :latEnd) AND (longitude BETWEEN :lngStart and :lngEnd)",
             nativeQuery = true)
     List<Hotel> findByLatLng(@Param("latStart") Double latStart,
                                  @Param("latEnd") Double latEnd,
@@ -49,14 +49,5 @@ public interface HotelRepo extends JpaRepository<Hotel, Long> {
                                 @Param("last") String last,
                                 @Param("middle") String middle
                                 );
-    //find images for hotel
-    @Query(value = "SELECT id, imageUrl from all_images where hotelId = :hotelId", nativeQuery = true)
-    List<Image> findAllHotelImages(@Param("hotelId") Long hotelId);
-
-    //find amenities for hotel
-    @Query(value = "SELECT amenities.title, amenities.content from amenities " +
-            "INNER JOIN hotel_amenities ON amenities.id = hotel_amenities.amenityId " +
-            " where hotel_amenities.hotelId = :hotelId order by amenities.id ASC", nativeQuery = true)
-    List<Amenity> findAllHotelAmenities(@Param("hotelId") Long hotelId);
 
 }
