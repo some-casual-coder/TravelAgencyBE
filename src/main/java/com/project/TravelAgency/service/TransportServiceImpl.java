@@ -85,7 +85,7 @@ public class TransportServiceImpl implements TransportService{
 
     @Override
     public List<Transport> findByLatLng(Double lat, Double lng) {
-        return transportRepo.findByLatLng(--lat, ++lat, --lng, ++lng);
+        return transportRepo.findByLatLng(lat, ++lat, lng, ++lng);
     }
 
     @Override

@@ -22,8 +22,8 @@ public interface TransportRepo extends JpaRepository<Transport, Long> {
 
 
     //find by latlng
-    @Query(value = "SELECT * from means_of_transport where latitude" +
-            " BETWEEN :latStart AND :latEnd AND longitude BETWEEN :lngStart and :lngEnd",
+    @Query(value = "SELECT * from means_of_transport where (latitude" +
+            " BETWEEN :latStart AND :latEnd) AND (longitude BETWEEN :lngStart and :lngEnd)",
             nativeQuery = true)
     List<Transport> findByLatLng(@Param("latStart") Double latStart,
                            @Param("latEnd") Double latEnd,
@@ -31,7 +31,7 @@ public interface TransportRepo extends JpaRepository<Transport, Long> {
                            @Param("lngEnd") Double lngEnd);
 
     //find by type
-    @Query(value = "SELECT * from means_of_transport where transportType = :transportType", nativeQuery = true)
+    @Query(value = "SELECT * from means_of_transport where transport_type = :transportType", nativeQuery = true)
     List<Transport> findByTransportType(@Param("transportType") Long transportType);
 
     //find by capacity

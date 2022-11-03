@@ -1,15 +1,19 @@
 package com.project.TravelAgency.service;
 
 import com.project.TravelAgency.entity.Amenity;
+import com.project.TravelAgency.entity.Hotel;
 import com.project.TravelAgency.entity.Image;
 import com.project.TravelAgency.entity.Room;
 import com.project.TravelAgency.repo.AmenityRepo;
+import com.project.TravelAgency.repo.HotelRepo;
 import com.project.TravelAgency.repo.ImageRepo;
 import com.project.TravelAgency.repo.RoomRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +30,12 @@ public class RoomServiceImpl implements RoomService{
     @Autowired
     private AmenityRepo amenityRepo;
 
+    @Autowired
+    private HotelRepo hotelRepo;
+
     @Override
     public Room addRoom(Room room) {
+        room.setAmenities(new HashSet<>());
         return roomRepo.save(room);
     }
 
@@ -75,7 +83,8 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public List<Room> findAllHotelRooms(Long hotelId) {
-        return roomRepo.findByHotel(hotelId);
+        Hotel hotel = hotelRepo.findById(hotelId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(hotelId)));
+        return roomRepo.findByHotel(hotel);
     }
 
     @Override

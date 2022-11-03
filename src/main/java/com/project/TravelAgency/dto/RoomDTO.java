@@ -1,6 +1,7 @@
 package com.project.TravelAgency.dto;
 
 import com.project.TravelAgency.entity.Amenity;
+import com.project.TravelAgency.entity.Hotel;
 import lombok.Data;
 
 import java.util.Set;
@@ -11,6 +12,6 @@ public class RoomDTO {
     private String name;
     private int capacity;
     private double pricePerDay;
-    private Long hotel;
+    private Hotel hotel;
     private Set<Amenity> amenities;
 }

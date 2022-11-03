@@ -15,14 +15,14 @@ import java.util.List;
 public interface RoomRepo extends JpaRepository<Room, Long> {
     //remove an amenity from a room
     @Modifying
-    @Query(value = "DELETE from room_amenities where roomId = :roomId AND amenityId = :amenityId", nativeQuery = true)
+    @Query(value = "DELETE from room_amenities where room_id = :roomId AND amenity_id = :amenityId", nativeQuery = true)
     void removeRoomAmenity(@Param("roomId") Long roomId, @Param("amenityId") Long amenityId);
 
     //find all as pages
     Page<Room> findAll(Pageable pageable);
 
     //find by hotel id
-    List<Room> findByHotel(Long hotel);
+    List<Room> findByHotel(Hotel hotel);
 
     //find by capacity and above
     List<Room> findByCapacityGreaterThanEqualOrderByCapacityAsc(int capacity);

@@ -12,6 +12,6 @@ import java.util.List;
 public interface TransportAddOnRepo extends JpaRepository<TransportAddOn, Long> {
     //find all addons for transport means
     @Query(value = "select transport_addons.title, transport_addons.description from transport_addons " +
-            "where transportId = :transportId", nativeQuery = true)
+            "where transport_id = :transportId", nativeQuery = true)
     List<TransportAddOn> findAllAddOns(@Param("transportId") Long transportId);
 }
