@@ -1,8 +1,6 @@
 package com.project.TravelAgency.service;
 
-import com.project.TravelAgency.entity.Image;
-import com.project.TravelAgency.entity.Transport;
-import com.project.TravelAgency.entity.TransportAddOn;
+import com.project.TravelAgency.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,6 +27,8 @@ public interface TransportService {
     //delete addon
     void deleteAddOn(Long id);
 
+    TransportType addTransportType(TransportType transportType);
+
     //delete image
     void deleteImage(Long id);
 
@@ -54,10 +54,10 @@ public interface TransportService {
     List<Image> findAllTransportImages(Long transportId);
 
     //find all addons for transport means
-    List<TransportAddOn> findAllAddOns(Long transportId);
+    List<TransportAddOn> findAllTransportAddOns(Transport transport);
 
     //find all owned by
-    List<Transport> findByOwner(Long owner);
+    List<Transport> findByOwner(User owner);
 
     //find by price between
     List<Transport> findAllBelowPrice(double price);

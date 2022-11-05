@@ -1,11 +1,10 @@
 package com.project.TravelAgency.service;
 
-import com.project.TravelAgency.entity.Image;
-import com.project.TravelAgency.entity.Transport;
-import com.project.TravelAgency.entity.TransportAddOn;
+import com.project.TravelAgency.entity.*;
 import com.project.TravelAgency.repo.ImageRepo;
 import com.project.TravelAgency.repo.TransportAddOnRepo;
 import com.project.TravelAgency.repo.TransportRepo;
+import com.project.TravelAgency.repo.TransportTypeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +27,9 @@ public class TransportServiceImpl implements TransportService{
 
     @Autowired
     private ImageRepo imageRepo;
+
+    @Autowired
+    private TransportTypeRepo typeRepo;
 
     @Override
     public Transport addMeansOfTransport(Transport transport) {
@@ -59,6 +61,11 @@ public class TransportServiceImpl implements TransportService{
     @Override
     public void deleteAddOn(Long id) {
         addOnRepo.deleteById(id);
+    }
+
+    @Override
+    public TransportType addTransportType(TransportType transportType) {
+        return typeRepo.save(transportType);
     }
 
     @Override
@@ -104,12 +111,12 @@ public class TransportServiceImpl implements TransportService{
     }
 
     @Override
-    public List<TransportAddOn> findAllAddOns(Long transportId) {
-        return addOnRepo.findAllAddOns(transportId);
+    public List<TransportAddOn> findAllTransportAddOns(Transport transport) {
+        return addOnRepo.findByTransport(transport);
     }
 
     @Override
-    public List<Transport> findByOwner(Long owner) {
+    public List<Transport> findByOwner(User owner) {
         return transportRepo.findByOwner(owner);
     }
 

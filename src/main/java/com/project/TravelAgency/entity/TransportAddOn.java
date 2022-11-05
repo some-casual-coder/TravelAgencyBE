@@ -1,5 +1,6 @@
 package com.project.TravelAgency.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,8 @@ public class TransportAddOn {
     private String title;
     private String description;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "transportId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Transport transport;
 }

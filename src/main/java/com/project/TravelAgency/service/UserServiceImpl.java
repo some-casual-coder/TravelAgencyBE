@@ -87,6 +87,11 @@ public class UserServiceImpl implements UserService{
         return false;
     }
 
+    @Override
+    public Optional<User> findById(Long id) {
+        return userRepo.findById(id);
+    }
+
     //TODO : find by email using like
     @Override
     public User findByEmail(String email) {

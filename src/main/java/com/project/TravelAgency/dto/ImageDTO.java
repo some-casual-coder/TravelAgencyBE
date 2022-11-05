@@ -10,6 +10,6 @@ public class ImageDTO {
     private Long id;
     private String imageUrl;
     private Transport transport;
-    private Hotel hotel_id;
+    private Hotel hotel; //hotel_id if it fails
     private Room room;
 }

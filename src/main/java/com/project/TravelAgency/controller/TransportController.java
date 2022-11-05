@@ -3,6 +3,7 @@ package com.project.TravelAgency.controller;
 import com.project.TravelAgency.dto.*;
 import com.project.TravelAgency.entity.*;
 import com.project.TravelAgency.service.TransportService;
+import com.project.TravelAgency.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class TransportController {
 
     @Autowired
     private TransportService transportService;
+
+    @Autowired
+    private UserService userService;
 
     //add means of transport
     @PostMapping({"/transport/add"})
@@ -62,7 +66,8 @@ public class TransportController {
     @GetMapping({"/transport/all/owner"})
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public List<Transport> findAllByOwner(@RequestParam Long ownerId){
-        return transportService.findByOwner(ownerId);
+        User owner = userService.findById(ownerId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(ownerId)));
+        return transportService.findByOwner(owner);
     }
 
     //add addon
@@ -84,7 +89,8 @@ public class TransportController {
     //find all addons for transport means
     @GetMapping({"/transport/addon/all"})
     public List<TransportAddOn> findAllTransportAddons(@RequestParam Long transportId){
-        return transportService.findAllAddOns(transportId);
+        Transport transport = transportService.findById(transportId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(transportId)));
+        return transportService.findAllTransportAddOns(transport);
     }
 
     //delete addon
@@ -92,6 +98,12 @@ public class TransportController {
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public void deleteAddon(@RequestParam Long addonId){
         transportService.deleteAddOn(addonId);
+    }
+
+    @PostMapping({"/transport/type/add"})
+    @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
+    public TransportTypeDTO addTransportType(@RequestBody TransportTypeDTO transportTypeDTO){
+        return convertToTypeDto(transportService.addTransportType(convertToTypeEntity(transportTypeDTO)));
     }
 
     //add image

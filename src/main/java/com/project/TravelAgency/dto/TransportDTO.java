@@ -1,6 +1,7 @@
 package com.project.TravelAgency.dto;
 
 import com.project.TravelAgency.entity.TransportType;
+import com.project.TravelAgency.entity.User;
 import lombok.Data;
 
 @Data
@@ -13,5 +14,5 @@ public class TransportDTO {
     private Double latitude;
     private Double longitude;
     private TransportType transportType;
-    private Long owner;
+    private User owner;
 }

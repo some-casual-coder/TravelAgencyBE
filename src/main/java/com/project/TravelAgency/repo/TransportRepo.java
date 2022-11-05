@@ -3,6 +3,7 @@ package com.project.TravelAgency.repo;
 import com.project.TravelAgency.entity.Image;
 import com.project.TravelAgency.entity.Transport;
 import com.project.TravelAgency.entity.TransportAddOn;
+import com.project.TravelAgency.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,7 +40,7 @@ public interface TransportRepo extends JpaRepository<Transport, Long> {
     List<Transport> findByCapacity(@Param("capacity") int capacity);
 
     //find all owned by
-    List<Transport> findByOwner(Long owner);
+    List<Transport> findByOwner(User owner);
 
     //find by price
     @Query(value = "SELECT * from means_of_transport where price <= :price order by price DESC", nativeQuery = true)
