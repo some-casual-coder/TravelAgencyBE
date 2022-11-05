@@ -1,5 +1,6 @@
 package com.project.TravelAgency.dto;
 
+import com.project.TravelAgency.entity.User;
 import lombok.Data;
 
 @Data
@@ -11,4 +12,5 @@ public class HotelDTO {
     private Double longitude;
     private String imageUrl;
     private double rating;
+    private User user;
 }

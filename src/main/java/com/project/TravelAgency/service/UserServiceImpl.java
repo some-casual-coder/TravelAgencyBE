@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setVerified(false);
         user.setRoles(new HashSet<>());
+        user.setHotels(new HashSet<>());
         User registeredUser = userRepo.save(user);
         roleService.addRoleToUser(registeredUser.getEmail(), ERole.ROLE_USER);
         return userRepo.save(registeredUser);
@@ -84,6 +85,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean deleteUser(Long id) {
         return false;
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return userRepo.findById(id);
     }
 
     //TODO : find by email using like

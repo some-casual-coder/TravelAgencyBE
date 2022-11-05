@@ -10,10 +10,12 @@ import org.springframework.data.domain.Pageable;
 import javax.mail.MessagingException;
 import javax.persistence.PersistenceException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     User registerUser(User user);
     boolean deleteUser(Long id);
+    Optional<User> findById(Long id);
     User findByEmail(String email);
     Page<User> findAll(Pageable pageable);
     VerificationCode getVerificationCode(String code);
