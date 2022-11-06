@@ -22,7 +22,7 @@ public interface BookingService {
 
     List<Booking> findAllBookings();
 
-    List<TripOption> findAllTripOptions(Booking booking);
+    List<TripOption> findAllTripOptionsForBooking(Booking booking);
 
     List<TripOption> findBookingsForTransport(Transport transport);
 
@@ -30,7 +30,7 @@ public interface BookingService {
 
     List<Booking> findBookingsForRoom(Room room);
 
-    List<Booking> findBookingsRequiringConfirmation(Room room);
+    List<Booking> findBookingsRequiringConfirmation(Long roomId);
 
     List<UserPayment> findAllPayments();
 

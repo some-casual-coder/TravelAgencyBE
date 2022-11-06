@@ -31,5 +31,6 @@ public class TripOption {
     private Date fromDate;
     private Date toDate;
     private Double totalCost;
+    private Double totalPaymentsMade;
     private boolean paymentCompleted;
 }

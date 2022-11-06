@@ -28,6 +28,7 @@ public class Booking {
     private Date fromDate;
     private Date toDate;
     private Double totalCost;
+    private Double totalPaymentsMade;
     private boolean paymentCompleted;
     private boolean stayCompleted;
     private boolean stayCompletedConfirmation;
