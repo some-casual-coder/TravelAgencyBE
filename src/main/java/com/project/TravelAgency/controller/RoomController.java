@@ -20,7 +20,7 @@ import static com.project.TravelAgency.controller.HotelController.*;
 @Slf4j
 public class RoomController {
     @Autowired
-    private ModelMapper modelMapper;
+    private static ModelMapper modelMapper;
 
     @Autowired
     private RoomService roomService;
@@ -29,22 +29,22 @@ public class RoomController {
     @PostMapping({"/room/add"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public RoomDTO addRoom(@RequestBody RoomDTO roomDTO) {
-        Room room = convertToEntity(roomDTO);
-        return convertToDto(roomService.addRoom(room));
+        Room room = convertToRoomEntity(roomDTO);
+        return convertToRoomDto(roomService.addRoom(room));
     }
 
     //find by id
     @GetMapping({"/room/get"})
     public RoomDTO findById(@RequestParam Long roomId) {
-        return convertToDto(roomService.findById(roomId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(roomId))));
+        return convertToRoomDto(roomService.findById(roomId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(roomId))));
     }
 
     //update room
     @PutMapping({"/room/update"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public RoomDTO updateRoom(@RequestBody RoomDTO roomDTO) {
-        Room room = convertToEntity(roomDTO);
-        return convertToDto(roomService.updateRoom(room));
+        Room room = convertToRoomEntity(roomDTO);
+        return convertToRoomDto(roomService.updateRoom(room));
     }
 
     //delete room
@@ -116,11 +116,11 @@ public class RoomController {
         return roomService.findAllBelowPrice(price);
     }
 
-    private RoomDTO convertToDto(Room room){
+    protected static RoomDTO convertToRoomDto(Room room){
         return modelMapper.map(room, RoomDTO.class);
     }
 
-    private Room convertToEntity(RoomDTO roomDTO){
+    protected static Room convertToRoomEntity(RoomDTO roomDTO){
         return modelMapper.map(roomDTO, Room.class);
     }
 }

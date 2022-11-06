@@ -30,7 +30,7 @@ public interface BookingService {
 
     List<Booking> findBookingsForRoom(Room room);
 
-    List<Booking> findBookingsRequiringConfirmation(Long roomId);
+    List<Booking> findBookingsRequiringConfirmation(Long roomId, Long userId);
 
     List<UserPayment> findAllPayments();
 

@@ -123,8 +123,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> findBookingsRequiringConfirmation(Long roomId) {
-        return bookingRepo.findBookingsRequiringConfirmation(roomId);
+    public List<Booking> findBookingsRequiringConfirmation(Long roomId, Long userId) {
+        return bookingRepo.findBookingsRequiringConfirmation(roomId, userId);
     }
 
     @Override

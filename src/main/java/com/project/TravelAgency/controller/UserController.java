@@ -31,7 +31,7 @@ public class UserController {
     private JwtService jwtService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private static ModelMapper modelMapper;
 
     @PostMapping({"/registerUser"})
     public User registerUser(@RequestBody UserDTO userDTO, HttpServletRequest request) throws MessagingException {
@@ -40,7 +40,7 @@ public class UserController {
                     .replacePath(null)
                     .build()
                     .toUriString();
-            User user = convertToEntity(userDTO);
+            User user = convertToUserEntity(userDTO);
             User registeredUser = userService.registerUser(user);
             String code = UUID.randomUUID().toString();
             VerificationCode verificationCode = userService.createVerificationCodeForUser(registeredUser, code);
@@ -170,11 +170,11 @@ public class UserController {
         return model;
     }
 
-    private UserDTO convertToDto(User user){
+    protected static UserDTO convertToUserDto(User user){
         return modelMapper.map(user, UserDTO.class);
     }
 
-    private User convertToEntity(UserDTO userDTO){
+    protected static User convertToUserEntity(UserDTO userDTO){
         return modelMapper.map(userDTO, User.class);
     }
 

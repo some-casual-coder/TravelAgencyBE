@@ -25,7 +25,7 @@ import static com.project.TravelAgency.controller.HotelController.convertToImage
 @Slf4j
 public class TransportController {
     @Autowired
-    private ModelMapper modelMapper;
+    private static ModelMapper modelMapper;
 
     @Autowired
     private TransportService transportService;
@@ -37,22 +37,22 @@ public class TransportController {
     @PostMapping({"/transport/add"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public TransportDTO addMeansOfTransport(@RequestBody TransportDTO transportDTO) {
-        Transport transport = convertToEntity(transportDTO);
-        return convertToDto(transportService.addMeansOfTransport(transport));
+        Transport transport = convertToTransportEntity(transportDTO);
+        return convertToTransportDto(transportService.addMeansOfTransport(transport));
     }
 
     //find by id
     @GetMapping({"/transport/get"})
     public TransportDTO findById(@RequestParam Long transportId) {
-        return convertToDto(transportService.findById(transportId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(transportId))));
+        return convertToTransportDto(transportService.findById(transportId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(transportId))));
     }
 
     //update means of transport
     @PutMapping({"/transport/update"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public TransportDTO updateTransport(@RequestBody TransportDTO transportDTO) {
-        Transport transport = convertToEntity(transportDTO);
-        return convertToDto(transportService.addMeansOfTransport(transport));
+        Transport transport = convertToTransportEntity(transportDTO);
+        return convertToTransportDto(transportService.addMeansOfTransport(transport));
     }
 
     //delete by id
@@ -163,11 +163,11 @@ public class TransportController {
         return transportService.findAllBelowPrice(price);
     }
 
-    private TransportDTO convertToDto(Transport transport){
+    protected static TransportDTO convertToTransportDto(Transport transport){
         return modelMapper.map(transport, TransportDTO.class);
     }
 
-    private Transport convertToEntity(TransportDTO transportDTO){
+    protected static Transport convertToTransportEntity(TransportDTO transportDTO){
         return modelMapper.map(transportDTO, Transport.class);
     }
 
