@@ -106,6 +106,11 @@ public class TransportController {
         return convertToTypeDto(transportService.addTransportType(convertToTypeEntity(transportTypeDTO)));
     }
 
+    @GetMapping({"/transport/type/all"})
+    public List<TransportType> findAllTypes(){
+        return transportService.findAllTypes();
+    }
+
     //add image
     @PostMapping({"/transport/image/add"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")

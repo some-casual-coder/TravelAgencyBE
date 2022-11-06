@@ -86,6 +86,11 @@ public class TransportServiceImpl implements TransportService{
     }
 
     @Override
+    public List<TransportType> findAllTypes() {
+        return typeRepo.findAll();
+    }
+
+    @Override
     public Optional<Transport> findById(Long id) {
         return transportRepo.findById(id);
     }

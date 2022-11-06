@@ -87,8 +87,8 @@ public class UserController {
         userService.sendVerificationEmail(baseURL, mail, verificationCode.getToken());
     }
 
-    @PostMapping({"/user/resetPassword"})
-    public boolean resetPassword(@RequestParam String email, HttpServletRequest request) throws MessagingException {
+    @GetMapping({"/user/resetPassword"})
+    public void resetPassword(@RequestParam String email, HttpServletRequest request) throws MessagingException {
         try{
             String baseURL = ServletUriComponentsBuilder.fromRequestUri(request)
                     .replacePath(null)
@@ -102,10 +102,9 @@ public class UserController {
             model.put("email", email);
             emailToSend.setModel(model);
             userService.sendPwdResetEmail(baseURL, emailToSend, passwordResetToken.getToken());
-            return true;
-        }catch (UserAlreadyExistsException ex){
+        }catch (MessagingException ex){
             log.error(String.valueOf(ex));
-            throw new UserAlreadyExistsException(ex);
+            throw new MessagingException();
         }
     }
 

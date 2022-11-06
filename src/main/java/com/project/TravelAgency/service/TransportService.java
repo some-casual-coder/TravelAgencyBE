@@ -38,6 +38,8 @@ public interface TransportService {
     //Find all by pages
     Page<Transport> findAll(Pageable pageable);
 
+    List<TransportType> findAllTypes();
+
     //find by id
     Optional<Transport> findById(Long id);
 
