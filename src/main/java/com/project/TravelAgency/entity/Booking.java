@@ -27,7 +27,7 @@ public class Booking {
 
     private Date fromDate;
     private Date toDate;
-    private Double total_cost;
+    private Double totalCost;
     private boolean paymentCompleted;
     private boolean stayCompleted;
     private boolean stayCompletedConfirmation;
