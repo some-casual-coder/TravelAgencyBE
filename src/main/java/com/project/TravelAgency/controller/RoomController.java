@@ -2,6 +2,7 @@ package com.project.TravelAgency.controller;
 
 import com.project.TravelAgency.dto.*;
 import com.project.TravelAgency.entity.*;
+
 import com.project.TravelAgency.repo.RoomRepo;
 import com.project.TravelAgency.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class RoomController {
 
     @Autowired
     private RoomRepo roomRepo;
-
+    
     //add room
     @PostMapping({"/room/add"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
@@ -78,7 +79,6 @@ public class RoomController {
     public String findFirstRoomImage(@RequestParam Long roomId) {
         return roomService.findFirstRoomImage(roomId);
     }
-
     //delete image
     @DeleteMapping({"/room/image/delete"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
@@ -135,6 +135,4 @@ public class RoomController {
     }
 
     protected static Room convertToRoomEntity(RoomDTO roomDTO){
-        return modelMapper.map(roomDTO, Room.class);
-    }
 }

@@ -26,7 +26,7 @@ public interface RoomRepo extends JpaRepository<Room, Long> {
 
     @Query(value = "select rooms.* from rooms inner join hotels on rooms.hotel_id =hotels.id where hotels.user_id= :owner", nativeQuery = true)
     List<Room> findByOwner(@Param("owner") Long owner);
-
+    
     //find by capacity and above
     List<Room> findByCapacityGreaterThanEqualOrderByCapacityAsc(int capacity);
 
