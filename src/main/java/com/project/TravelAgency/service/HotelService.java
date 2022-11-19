@@ -3,6 +3,7 @@ package com.project.TravelAgency.service;
 import com.project.TravelAgency.entity.Amenity;
 import com.project.TravelAgency.entity.Hotel;
 import com.project.TravelAgency.entity.Image;
+import com.project.TravelAgency.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -49,6 +50,8 @@ public interface HotelService {
 
     //find by name
     List<Hotel> findByName(String name);
+
+    List<Hotel> findByUser(User user);
 
     //find images for hotel
     List<Image> findAllHotelImages(Long hotelId);

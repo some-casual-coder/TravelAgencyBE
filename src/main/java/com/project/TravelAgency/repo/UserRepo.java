@@ -8,9 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
+
     User findByEmail(String email);
+    List<User> findByEmailContainingIgnoreCase(String email);
+
+    List<User> findByBanned(boolean banned);
+
     boolean existsUserByEmail(String email);
     Page<User> findAll(Pageable pageable);
 

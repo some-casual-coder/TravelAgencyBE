@@ -22,11 +22,9 @@ public class Transport {
     private Long id;
 
     private String model;
-    private String chargedPer;
     private int capacity;
     private double price;
-    private Double latitude;
-    private Double longitude;
+   private String town;
 
 //    @OneToOne(targetEntity = TransportType.class, fetch = FetchType.EAGER)
 //    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_transport_type"))

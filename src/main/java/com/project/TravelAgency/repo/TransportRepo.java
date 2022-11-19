@@ -1,9 +1,6 @@
 package com.project.TravelAgency.repo;
 
-import com.project.TravelAgency.entity.Image;
-import com.project.TravelAgency.entity.Transport;
-import com.project.TravelAgency.entity.TransportAddOn;
-import com.project.TravelAgency.entity.User;
+import com.project.TravelAgency.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -45,5 +42,8 @@ public interface TransportRepo extends JpaRepository<Transport, Long> {
     //find by price
     @Query(value = "SELECT * from means_of_transport where price <= :price order by price DESC", nativeQuery = true)
     List<Transport> findAllBelowPrice(@Param("price") double price);
+
+    List<Transport> findByTownContainingIgnoreCase(String town);
+    List<Transport> findByModelContainingIgnoreCase(String model);
 
 }

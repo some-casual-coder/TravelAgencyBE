@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +26,7 @@ public class User {
     @JsonIgnore
     private String password;
     private boolean verified;
+    private boolean banned;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
@@ -39,4 +42,22 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Hotel> hotels;
+
+    @JsonIgnore
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "madeBy",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<UserReview> reviews = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<FavouriteVehicle> favouriteVehicles = new ArrayList<>();
 }

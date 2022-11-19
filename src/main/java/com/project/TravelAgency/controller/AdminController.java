@@ -27,7 +27,7 @@ public class AdminController {
     private HotelService hotelService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("/users/all")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")

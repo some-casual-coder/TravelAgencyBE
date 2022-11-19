@@ -25,7 +25,7 @@ import static com.project.TravelAgency.controller.HotelController.convertToImage
 @Slf4j
 public class TransportController {
     @Autowired
-    private ModelMapper modelMapper;
+    private static ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private TransportService transportService;
@@ -37,22 +37,22 @@ public class TransportController {
     @PostMapping({"/transport/add"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public TransportDTO addMeansOfTransport(@RequestBody TransportDTO transportDTO) {
-        Transport transport = convertToEntity(transportDTO);
-        return convertToDto(transportService.addMeansOfTransport(transport));
+        Transport transport = convertToTransportEntity(transportDTO);
+        return convertToTransportDto(transportService.addMeansOfTransport(transport));
     }
 
     //find by id
     @GetMapping({"/transport/get"})
     public TransportDTO findById(@RequestParam Long transportId) {
-        return convertToDto(transportService.findById(transportId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(transportId))));
+        return convertToTransportDto(transportService.findById(transportId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(transportId))));
     }
 
     //update means of transport
     @PutMapping({"/transport/update"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
     public TransportDTO updateTransport(@RequestBody TransportDTO transportDTO) {
-        Transport transport = convertToEntity(transportDTO);
-        return convertToDto(transportService.addMeansOfTransport(transport));
+        Transport transport = convertToTransportEntity(transportDTO);
+        return convertToTransportDto(transportService.addMeansOfTransport(transport));
     }
 
     //delete by id
@@ -106,6 +106,11 @@ public class TransportController {
         return convertToTypeDto(transportService.addTransportType(convertToTypeEntity(transportTypeDTO)));
     }
 
+    @GetMapping({"/transport/type/all"})
+    public List<TransportType> findAllTypes(){
+        return transportService.findAllTypes();
+    }
+
     //add image
     @PostMapping({"/transport/image/add"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
@@ -134,12 +139,6 @@ public class TransportController {
         return transportService.findAll(pageable);
     }
 
-    //find all by coordinates
-    @GetMapping({"/transport/all/nearby"})
-    public List<Transport> findAllNearby(@RequestParam Double lat, @RequestParam Double lng) {
-        return transportService.findByLatLng(lat, lng);
-    }
-
     //find all by type
     @GetMapping({"/transport/all/type"})
     public List<Transport> findByType(@RequestParam Long typeId) {
@@ -152,17 +151,27 @@ public class TransportController {
         return transportService.findByCapacity(capacity);
     }
 
+    @GetMapping({"/transport/all/model"})
+    public List<Transport> findByModel(@RequestParam String model) {
+        return transportService.findByModel(model);
+    }
+
+    @GetMapping({"/transport/all/town"})
+    public List<Transport> findByTown(@RequestParam String town) {
+        return transportService.findByTown(town);
+    }
+
     //find all below price
     @GetMapping({"/transport/all/price"})
     public List<Transport> findBelowPrice(@RequestParam double price) {
         return transportService.findAllBelowPrice(price);
     }
 
-    private TransportDTO convertToDto(Transport transport){
+    protected static TransportDTO convertToTransportDto(Transport transport){
         return modelMapper.map(transport, TransportDTO.class);
     }
 
-    private Transport convertToEntity(TransportDTO transportDTO){
+    protected static Transport convertToTransportEntity(TransportDTO transportDTO){
         return modelMapper.map(transportDTO, Transport.class);
     }
 

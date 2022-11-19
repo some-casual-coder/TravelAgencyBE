@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class UserController {
     private JwtService jwtService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private static ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping({"/registerUser"})
     public User registerUser(@RequestBody UserDTO userDTO, HttpServletRequest request) throws MessagingException {
@@ -40,7 +41,7 @@ public class UserController {
                     .replacePath(null)
                     .build()
                     .toUriString();
-            User user = convertToEntity(userDTO);
+            User user = convertToUserEntity(userDTO);
             User registeredUser = userService.registerUser(user);
             String code = UUID.randomUUID().toString();
             VerificationCode verificationCode = userService.createVerificationCodeForUser(registeredUser, code);
@@ -87,8 +88,8 @@ public class UserController {
         userService.sendVerificationEmail(baseURL, mail, verificationCode.getToken());
     }
 
-    @PostMapping({"/user/resetPassword"})
-    public boolean resetPassword(@RequestParam String email, HttpServletRequest request) throws MessagingException {
+    @GetMapping({"/user/resetPassword"})
+    public void resetPassword(@RequestParam String email, HttpServletRequest request) throws MessagingException {
         try{
             String baseURL = ServletUriComponentsBuilder.fromRequestUri(request)
                     .replacePath(null)
@@ -102,10 +103,9 @@ public class UserController {
             model.put("email", email);
             emailToSend.setModel(model);
             userService.sendPwdResetEmail(baseURL, emailToSend, passwordResetToken.getToken());
-            return true;
-        }catch (UserAlreadyExistsException ex){
+        }catch (MessagingException ex){
             log.error(String.valueOf(ex));
-            throw new UserAlreadyExistsException(ex);
+            throw new MessagingException();
         }
     }
 
@@ -132,6 +132,16 @@ public class UserController {
     @GetMapping("/users/findByEmail")
     public User findByEmail(@RequestParam String email){
         return userService.findByEmail(email);
+    }
+
+    @GetMapping("/users/findAllBanned")
+    public List<User> findAllBanned(){
+        return userService.findAllBanned();
+    }
+
+    @GetMapping("/users/findEmailMatches")
+    public List<User> findEmailMatches(@RequestParam("email") String email){
+        return userService.findByEmailLike(email);
     }
 
 
@@ -171,11 +181,11 @@ public class UserController {
         return model;
     }
 
-    private UserDTO convertToDto(User user){
+    protected static UserDTO convertToUserDto(User user){
         return modelMapper.map(user, UserDTO.class);
     }
 
-    private User convertToEntity(UserDTO userDTO){
+    protected static User convertToUserEntity(UserDTO userDTO){
         return modelMapper.map(userDTO, User.class);
     }
 

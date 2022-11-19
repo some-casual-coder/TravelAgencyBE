@@ -20,24 +20,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig{
+public class WebSecurityConfig {
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity,
                                            AuthEntryPoint authEntryPoint,
-                                           CustomAuthorizationFilter customAuthorizationFilter) throws Exception{
+                                           CustomAuthorizationFilter customAuthorizationFilter) throws Exception {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
                 .authorizeRequests().antMatchers(
+                        "/room/all",
+                        "/getDestinations",
                         "/authenticate",
                         "/registerUser",
                         "/user/verifyUser",
@@ -45,7 +47,7 @@ public class WebSecurityConfig{
                         "/checkEmailExists",
                         "/user/resetPassword",
                         "/user/changePassword"
-                        ).permitAll()
+                ).permitAll()
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()

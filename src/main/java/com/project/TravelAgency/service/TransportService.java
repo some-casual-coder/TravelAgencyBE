@@ -38,11 +38,15 @@ public interface TransportService {
     //Find all by pages
     Page<Transport> findAll(Pageable pageable);
 
+    List<TransportType> findAllTypes();
+    
     //find by id
     Optional<Transport> findById(Long id);
 
     //find by lat lng
-    List<Transport> findByLatLng(Double lat, Double lng);
+    List<Transport> findByTown(String town);
+
+    List<Transport> findByModel(String model);
 
     //find by type
     List<Transport> findByTransportType(Long transportType);

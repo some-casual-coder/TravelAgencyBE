@@ -11,6 +11,7 @@ public class RoomDTO {
     private Long id;
     private String name;
     private int capacity;
+    private String description;
     private double pricePerDay;
     private Hotel hotel;
     private Set<Amenity> amenities;

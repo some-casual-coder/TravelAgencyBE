@@ -14,6 +14,7 @@ public class UserDTO {
     private String email;
     private String password;
     private boolean verified;
+    private boolean banned;
     private Set<Role> roles;
     private Set<Hotel> hotels;
 }
