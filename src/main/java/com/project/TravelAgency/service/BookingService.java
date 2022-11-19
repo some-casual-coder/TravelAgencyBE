@@ -31,8 +31,12 @@ public interface BookingService {
     List<Booking> findBookingsForRoom(Room room);
 
     List<Booking> findBookingsRequiringConfirmation(Long roomId, Long userId);
+    List<Booking> findAllBookingsForHotelsOwnedByUser(Long userId);
 
-    List<UserPayment> findAllPayments();
+    List<Booking> findAllPaymentNotCompleted();
+
+    List<Booking> findAllPaymentCompleted();
+    List<Booking> findAllCancelled();
 
     List<UserPayment> findAllPaymentsLatest();
 

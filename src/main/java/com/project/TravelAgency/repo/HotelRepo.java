@@ -1,9 +1,6 @@
 package com.project.TravelAgency.repo;
 
-import com.project.TravelAgency.entity.Amenity;
-import com.project.TravelAgency.entity.Hotel;
-import com.project.TravelAgency.entity.Image;
-import com.project.TravelAgency.entity.Transport;
+import com.project.TravelAgency.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +20,8 @@ public interface HotelRepo extends JpaRepository<Hotel, Long> {
     void removeHotelAmenity(@Param("hotelId") Long hotelId, @Param("amenityId") Long amenityId);
 
     Page<Hotel> findAll(Pageable pageable);
+
+    List<Hotel> findByUser(User user);
 
     @Query(value = "SELECT * from hotels where (latitude" +
             " BETWEEN :latStart AND :latEnd) AND (longitude BETWEEN :lngStart and :lngEnd)",

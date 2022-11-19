@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class UserController {
     private JwtService jwtService;
 
     @Autowired
-    private static ModelMapper modelMapper;
+    private static ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping({"/registerUser"})
     public User registerUser(@RequestBody UserDTO userDTO, HttpServletRequest request) throws MessagingException {
@@ -131,6 +132,16 @@ public class UserController {
     @GetMapping("/users/findByEmail")
     public User findByEmail(@RequestParam String email){
         return userService.findByEmail(email);
+    }
+
+    @GetMapping("/users/findAllBanned")
+    public List<User> findAllBanned(){
+        return userService.findAllBanned();
+    }
+
+    @GetMapping("/users/findEmailMatches")
+    public List<User> findEmailMatches(@RequestParam("email") String email){
+        return userService.findByEmailLike(email);
     }
 
 

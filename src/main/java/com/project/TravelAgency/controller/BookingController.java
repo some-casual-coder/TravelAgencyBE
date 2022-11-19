@@ -139,8 +139,9 @@ public class BookingController {
     //    List<Booking> findAllBookingsForUser(User user);
     @GetMapping({"/booking/user/all"})
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public List<Booking> findAllBookingsForUser(@RequestBody Long userId) {
+    public List<Booking> findAllBookingsForUser(@RequestParam Long userId) {
         User user = userService.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(userId)));
+        System.out.println("=============" + user.getEmail());
         return bookingService.findAllBookingsForUser(user);
     }
 

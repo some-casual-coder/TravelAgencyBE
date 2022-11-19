@@ -96,8 +96,13 @@ public class TransportServiceImpl implements TransportService{
     }
 
     @Override
-    public List<Transport> findByLatLng(Double lat, Double lng) {
-        return transportRepo.findByLatLng(lat, ++lat, lng, ++lng);
+    public List<Transport> findByTown(String town) {
+        return transportRepo.findByTownContainingIgnoreCase(town);
+    }
+
+    @Override
+    public List<Transport> findByModel(String model) {
+        return transportRepo.findByModelContainingIgnoreCase(model);
     }
 
     @Override

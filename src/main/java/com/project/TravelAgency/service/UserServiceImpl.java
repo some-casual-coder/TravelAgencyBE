@@ -75,11 +75,17 @@ public class UserServiceImpl implements UserService{
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setVerified(false);
+        user.setBanned(false);
         user.setRoles(new HashSet<>());
         user.setHotels(new HashSet<>());
         User registeredUser = userRepo.save(user);
         roleService.addRoleToUser(registeredUser.getEmail(), ERole.ROLE_USER);
         return userRepo.save(registeredUser);
+    }
+
+    @Override
+    public User updateUser(User user){
+        return userRepo.save(user);
     }
 
     @Override
@@ -92,10 +98,19 @@ public class UserServiceImpl implements UserService{
         return userRepo.findById(id);
     }
 
-    //TODO : find by email using like
     @Override
     public User findByEmail(String email) {
         return userRepo.findByEmail(email);
+    }
+
+    @Override
+    public List<User> findByEmailLike(String email) {
+        return userRepo.findByEmailContainingIgnoreCase(email);
+    }
+
+    @Override
+    public List<User> findAllBanned() {
+        return userRepo.findByBanned(true);
     }
 
     @Override

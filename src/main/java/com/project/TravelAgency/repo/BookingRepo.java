@@ -11,13 +11,21 @@ import java.util.List;
 
 @Repository
 public interface BookingRepo extends JpaRepository<Booking, Long> {
-    List<Booking> findByUser(User user);
+    List<Booking> findByUserOrderByIdDesc(User user);
+    List<Booking> findByPaymentCompletedOrderByIdDesc(boolean paymentCompleted);
+    List<Booking> findByCancelled(boolean cancelled);
+
+
     List<Booking> findByRoom(Room room);
 
-//    @Query(value = "SELECT * from bookings where (stay_completed = true) AND (paymentCompleted = true) where room_id = :roomId", nativeQuery = true)
-    @Query(value = "SELECT bookings.* from bookings inner join rooms ON " +
+    @Query(value = "SELECT bookings.* from bookings where (stay_completed) = true AND (payment_completed) = true inner join rooms ON " +
             "bookings.room_id = :roomId inner join hotels ON rooms.hotel_id = hotels.id where " +
             "hotels.user_id = :userId", nativeQuery = true)
     List<Booking> findBookingsRequiringConfirmation(Long roomId, Long userId);
+
+    @Query(value = "SELECT bookings.* from bookings inner join rooms ON " +
+            "bookings.room_id = :roomId inner join hotels ON rooms.hotel_id = hotels.id where " +
+            "hotels.user_id = :userId order by id desc", nativeQuery = true)
+    List<Booking> findAllBookingsForHotelOwnedByUser(Long roomId, Long userId);
 
 }

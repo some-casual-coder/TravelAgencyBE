@@ -3,6 +3,7 @@ package com.project.TravelAgency.service;
 import com.project.TravelAgency.entity.Amenity;
 import com.project.TravelAgency.entity.Hotel;
 import com.project.TravelAgency.entity.Image;
+import com.project.TravelAgency.entity.User;
 import com.project.TravelAgency.repo.AmenityRepo;
 import com.project.TravelAgency.repo.HotelRepo;
 import com.project.TravelAgency.repo.ImageRepo;
@@ -109,6 +110,11 @@ public class HotelServiceImpl implements HotelService{
         String last = String.valueOf(name.charAt(n-1));
         String middle = String.valueOf(name.charAt(2) + name.charAt(3));
         return hotelRepo.findByHotelName(name, first, last, middle);
+    }
+
+    @Override
+    public List<Hotel> findByUser(User user) {
+        return hotelRepo.findByUser(user);
     }
 
     @Override

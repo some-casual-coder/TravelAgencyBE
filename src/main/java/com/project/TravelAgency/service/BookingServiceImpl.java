@@ -1,15 +1,14 @@
 package com.project.TravelAgency.service;
 
 import com.project.TravelAgency.entity.*;
-import com.project.TravelAgency.repo.BookingRepo;
-import com.project.TravelAgency.repo.TripOptionRepo;
-import com.project.TravelAgency.repo.UserPaymentRepo;
+import com.project.TravelAgency.repo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,15 +26,18 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private UserPaymentRepo paymentRepo;
 
+    @Autowired
+    private RoomRepo roomRepo;
+
     @Override
     public Booking makeBooking(Booking booking) {
-        Double price = booking.getRoom().getPricePerDay();
+        Room room = roomRepo.findById(booking.getRoom().getId()).orElseThrow();
+        Double price = room.getPricePerDay();
         Long start = booking.getFromDate().getTime();
         Long end = booking.getToDate().getTime();
         long timeDiff = Math.abs(start - end);
         Long days = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
         Double totalCost = price * days;
-        log.info("-=====================================" + totalCost + "==========" + days);
         booking.setTotalCost(totalCost);
         return bookingRepo.save(booking);
     }
@@ -52,6 +54,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public TripOption addTripOption(TripOption tripOption) {
+
         Double price = tripOption.getTransport().getPrice();
         Long start = tripOption.getFromDate().getTime();
         Long end = tripOption.getToDate().getTime();
@@ -114,7 +117,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> findAllBookingsForUser(User user) {
-        return bookingRepo.findByUser(user);
+        return bookingRepo.findByUserOrderByIdDesc(user);
     }
 
     @Override
@@ -128,8 +131,28 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<UserPayment> findAllPayments() {
-        return paymentRepo.findAll();
+    public List<Booking> findAllBookingsForHotelsOwnedByUser(Long userId) {
+        List<Room> ownedRooms = roomRepo.findByOwner(userId);
+        List<Booking> allBookings = new ArrayList<>();
+        for (Room ownedRoom : ownedRooms) {
+            allBookings.addAll(bookingRepo.findByRoom(ownedRoom));
+        }
+        return allBookings;
+    }
+
+    @Override
+    public List<Booking> findAllPaymentNotCompleted() {
+        return bookingRepo.findByPaymentCompletedOrderByIdDesc(true);
+    }
+
+    @Override
+    public List<Booking> findAllPaymentCompleted() {
+        return bookingRepo.findByPaymentCompletedOrderByIdDesc(false);
+    }
+
+    @Override
+    public List<Booking> findAllCancelled() {
+        return bookingRepo.findByCancelled(true);
     }
 
     @Override

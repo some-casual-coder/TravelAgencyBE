@@ -25,7 +25,7 @@ import static com.project.TravelAgency.controller.HotelController.convertToImage
 @Slf4j
 public class TransportController {
     @Autowired
-    private static ModelMapper modelMapper;
+    private static ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private TransportService transportService;
@@ -139,12 +139,6 @@ public class TransportController {
         return transportService.findAll(pageable);
     }
 
-    //find all by coordinates
-    @GetMapping({"/transport/all/nearby"})
-    public List<Transport> findAllNearby(@RequestParam Double lat, @RequestParam Double lng) {
-        return transportService.findByLatLng(lat, lng);
-    }
-
     //find all by type
     @GetMapping({"/transport/all/type"})
     public List<Transport> findByType(@RequestParam Long typeId) {
@@ -155,6 +149,16 @@ public class TransportController {
     @GetMapping({"/transport/all/capacity"})
     public List<Transport> findAboveCapacity(@RequestParam int capacity) {
         return transportService.findByCapacity(capacity);
+    }
+
+    @GetMapping({"/transport/all/model"})
+    public List<Transport> findByModel(@RequestParam String model) {
+        return transportService.findByModel(model);
+    }
+
+    @GetMapping({"/transport/all/town"})
+    public List<Transport> findByTown(@RequestParam String town) {
+        return transportService.findByTown(town);
     }
 
     //find all below price

@@ -24,6 +24,7 @@ public class Hotel {
     private String town;
     private Double latitude;
     private Double longitude;
+    private String description;
     private String imageUrl;
     private double rating;
 
@@ -51,5 +52,9 @@ public class Hotel {
             }
     )
     private Set<Amenity> amenities;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
+    private Set<UserReview> reviews;
 
 }

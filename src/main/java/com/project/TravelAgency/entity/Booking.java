@@ -32,4 +32,5 @@ public class Booking {
     private boolean paymentCompleted;
     private boolean stayCompleted;
     private boolean stayCompletedConfirmation;
+    private boolean cancelled;
 }

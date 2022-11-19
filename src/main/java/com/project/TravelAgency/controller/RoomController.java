@@ -2,6 +2,7 @@ package com.project.TravelAgency.controller;
 
 import com.project.TravelAgency.dto.*;
 import com.project.TravelAgency.entity.*;
+import com.project.TravelAgency.repo.RoomRepo;
 import com.project.TravelAgency.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -20,10 +21,13 @@ import static com.project.TravelAgency.controller.HotelController.*;
 @Slf4j
 public class RoomController {
     @Autowired
-    private static ModelMapper modelMapper;
+    private static ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomRepo roomRepo;
 
     //add room
     @PostMapping({"/room/add"})
@@ -70,6 +74,11 @@ public class RoomController {
         return roomService.findAllRoomImages(roomId);
     }
 
+    @GetMapping({"/room/image/first"})
+    public String findFirstRoomImage(@RequestParam Long roomId) {
+        return roomService.findFirstRoomImage(roomId);
+    }
+
     //delete image
     @DeleteMapping({"/room/image/delete"})
     @PreAuthorize("hasAnyRole('ROLE_HOST','ROLE_ADMIN','ROLE_SUPER_ADMIN')")
@@ -114,6 +123,11 @@ public class RoomController {
     @GetMapping({"/room/all/price"})
     public List<Room> findAllRoomsBelowPrice(@RequestParam double price){
         return roomService.findAllBelowPrice(price);
+    }
+
+    @GetMapping({"/room/all"})
+    public List<Room> findAllRooms(){
+        return roomRepo.findAll();
     }
 
     protected static RoomDTO convertToRoomDto(Room room){

@@ -14,9 +14,14 @@ import java.util.Optional;
 
 public interface UserService {
     User registerUser(User user);
+
+    User updateUser(User user);
+
     boolean deleteUser(Long id);
     Optional<User> findById(Long id);
     User findByEmail(String email);
+    List<User> findByEmailLike(String email);
+    List<User> findAllBanned();
     Page<User> findAll(Pageable pageable);
     VerificationCode getVerificationCode(String code);
     VerificationCode createVerificationCodeForUser(User user, String code);

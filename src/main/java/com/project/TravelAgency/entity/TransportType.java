@@ -21,6 +21,7 @@ public class TransportType {
     private Long id;
 
     private String type;
+    private String icon;
 
     @JsonIgnore
     @OneToMany(mappedBy = "transportType")

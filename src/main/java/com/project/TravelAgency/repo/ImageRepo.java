@@ -18,6 +18,9 @@ public interface ImageRepo extends JpaRepository<Image, Long> {
     @Query(value = "SELECT * from all_images where room_id = :roomId", nativeQuery = true)
     List<Image> findAllRoomImages(@Param("roomId") Long roomId);
 
+    @Query(value = "SELECT image_url from all_images where room_id = :roomId limit 1", nativeQuery = true)
+    String findFirstRoomImage(@Param("roomId") Long roomId);
+
     //find all transport means images
     @Query(value = "SELECT * from all_images " +
             "where transport_id = :transportId order by transport_id ASC", nativeQuery = true)

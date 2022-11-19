@@ -3,6 +3,7 @@ package com.project.TravelAgency.service;
 import com.project.TravelAgency.entity.Amenity;
 import com.project.TravelAgency.entity.Image;
 import com.project.TravelAgency.entity.Room;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,8 @@ public interface RoomService {
 
     //find all room images
     List<Image> findAllRoomImages(Long roomId);
+
+    String findFirstRoomImage(Long roomId);
 
     //find all room amenities
     List<Amenity> findAllRoomAmenities(Long roomId);

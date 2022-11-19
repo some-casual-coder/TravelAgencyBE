@@ -103,6 +103,11 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
+    public String findFirstRoomImage(Long roomId) {
+        return imageRepo.findFirstRoomImage(roomId);
+    }
+
+    @Override
     public List<Amenity> findAllRoomAmenities(Long roomId) {
         return amenityRepo.findAllRoomAmenities(roomId);
     }

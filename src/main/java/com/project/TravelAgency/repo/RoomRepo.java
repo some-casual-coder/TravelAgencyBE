@@ -19,10 +19,13 @@ public interface RoomRepo extends JpaRepository<Room, Long> {
     void removeRoomAmenity(@Param("roomId") Long roomId, @Param("amenityId") Long amenityId);
 
     //find all as pages
-    Page<Room> findAll(Pageable pageable);
+    List<Room> findAll();
 
     //find by hotel id
     List<Room> findByHotel(Hotel hotel);
+
+    @Query(value = "select rooms.* from rooms inner join hotels on rooms.hotel_id =hotels.id where hotels.user_id= :owner", nativeQuery = true)
+    List<Room> findByOwner(@Param("owner") Long owner);
 
     //find by capacity and above
     List<Room> findByCapacityGreaterThanEqualOrderByCapacityAsc(int capacity);

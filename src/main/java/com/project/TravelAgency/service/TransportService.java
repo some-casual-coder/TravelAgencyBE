@@ -44,7 +44,9 @@ public interface TransportService {
     Optional<Transport> findById(Long id);
 
     //find by lat lng
-    List<Transport> findByLatLng(Double lat, Double lng);
+    List<Transport> findByTown(String town);
+
+    List<Transport> findByModel(String model);
 
     //find by type
     List<Transport> findByTransportType(Long transportType);
